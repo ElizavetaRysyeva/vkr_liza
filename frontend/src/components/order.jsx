@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import {useEffect} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {Link, useParams} from "react-router-dom";
 import axios from "axios";
@@ -16,9 +16,9 @@ const Component = () => {
     const apiBase = useSelector((state) => state.toolkit.apiBase);
     const rooms = useSelector((state) => state.toolkit.rooms);
     const orderStatuses = useSelector((state) => state.toolkit.orderStatuses);
-    const [selected, setSelected] = useState([]);
     const dispatch = useDispatch();
     const isLoggedIn = useSelector((state) => state.toolkit.isLoggedIn);
+    const user = useSelector((state) => state.toolkit.user);
 
 
     useEffect(() => {
@@ -42,6 +42,7 @@ const Component = () => {
                         status: +status,
                         hotel_id: +id,
                         room_id: +s,
+                        user_id: +user.id,
                     },
                     { headers: authHeader() }
                 )
