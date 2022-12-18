@@ -13,12 +13,12 @@ import Card from "react-bootstrap/Card";
 
 const Component = () => {
     let {id} = useParams();
+
     const apiBase = useSelector((state) => state.toolkit.apiBase);
     const rooms = useSelector((state) => state.toolkit.rooms);
     const orderStatuses = useSelector((state) => state.toolkit.orderStatuses);
     const dispatch = useDispatch();
     const isLoggedIn = useSelector((state) => state.toolkit.isLoggedIn);
-    const user = useSelector((state) => state.toolkit.user);
 
 
     useEffect(() => {
@@ -42,7 +42,6 @@ const Component = () => {
                         status: +status,
                         hotel_id: +id,
                         room_id: +s,
-                        user_id: +user.id,
                     },
                     { headers: authHeader() }
                 )

@@ -14,7 +14,8 @@ const Component = () => {
 
     const [name, setName] = useState("");
     const [hotels, setHotels] = useState([]);
-
+    const isLoggedIn = useSelector((state) => state.toolkit.isLoggedIn);
+    
     const find = () => {
         axios.get(`${apiBase}/hotels/?name=${encodeURIComponent(name)}`, { headers: authHeader() }).then((resp) => {
             setHotels(resp.data);
@@ -68,9 +69,10 @@ const Component = () => {
                                         >
                                             Об отеле
                                         </Button>
+                                        {isLoggedIn &&
                                         <Button variant="outline-primary" as={Link} to={`order/${x.id}`}>
                                             Забронировать номер
-                                        </Button>
+                                        </Button> }
                                     </ButtonGroup>
                                 </td>
                             </tr>

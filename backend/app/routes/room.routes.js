@@ -1,6 +1,6 @@
 module.exports = (app) => {
   const controller = require("../controllers/room.controller.js");
-
+  const authJwt = require("../middleware/authJwt");
   const router = require("express").Router();
 
   // Create a new Room
@@ -15,11 +15,19 @@ module.exports = (app) => {
   // Update a Room with id
   router.put("/:id", controller.update);
 
-  // Delete a Room with id
-  router.delete("/:id", controller.delete);
+  // Delete Room with id
+  router.delete(
+      "/:id",
+      [authJwt.verifyToken, authJwt.isAdmin],
+      controller.delete
+  );
 
   // Delete all Rooms
-  router.delete("/", controller.deleteAll);
+  router.delete(
+      "/",
+      [authJwt.verifyToken, authJwt.isAdmin],
+      controller.deleteAll
+  );
 
   // Retrieve Rooms by stars
   router.get("/hotel/:hotel_id", controller.findAllByHotels);

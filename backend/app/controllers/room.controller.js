@@ -16,9 +16,9 @@ exports.create = (req, res) => {
     const obj = {
         category: req.body.category,
         max_count: req.body.max_count,
-        bed_type: req.body.bed_type,
+        image: req.body.image,
         price: req.body.price,
-        total: req.body.total,
+        description: req.body.description,
         hotel_id: req.body.hotel_id,
     };
 

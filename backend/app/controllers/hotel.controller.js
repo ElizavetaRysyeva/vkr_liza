@@ -32,7 +32,7 @@ exports.create = (req, res) => {
         });
 };
 
-// Retrieve all Movie from the database.
+// Retrieve all Hotels from the database.
 exports.findAll = (req, res) => {
     if (req.query.hasOwnProperty(`name`) && !req.query.name) {
         res.status(404).send({

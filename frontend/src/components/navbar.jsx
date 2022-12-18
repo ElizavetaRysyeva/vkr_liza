@@ -6,6 +6,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Badge from "react-bootstrap/Badge";
 import { logout } from "./reducerSlice";
+import Footer from "./footer";
 
 const Component = () => {
   const orders = useSelector((state) => state.toolkit.orders);
@@ -41,7 +42,9 @@ const Component = () => {
               Главная страница
             </Nav.Link>
           </Nav>
+          <Footer/>
           <Nav className="ms-auto">
+            {isLoggedIn &&
             <Nav.Link as={Link} to="/cart">
               {orders && orders.length > 0 && (
                 <Badge bg="secondary" className="me-1">
@@ -49,7 +52,7 @@ const Component = () => {
                 </Badge>
               )}
               Корзина
-            </Nav.Link>
+            </Nav.Link>}
             {isLoggedIn ? (
               <>
                 <Nav.Link as={Link} to="/profile">

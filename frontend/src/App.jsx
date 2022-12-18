@@ -10,6 +10,7 @@ import Login from "./components/login";
 import Register from "./components/register";
 import Page404 from "./components/page404";
 import Profile from "./components/profile";
+import Admin from "./components/admin";
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                     </Route>
                     <Route path="hotel/:id" element={<Order/>}/>
                     <Route path="cart" element={<Cart/>}/>
+                    <Route path="admin" element={<Admin />} />
                     <Route path="login" element={<Login />} />
                     <Route path="register" element={<Register />} />
                     <Route path="profile" element={<Profile />} />

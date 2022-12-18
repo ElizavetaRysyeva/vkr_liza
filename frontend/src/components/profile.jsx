@@ -55,7 +55,7 @@ const Profile = () => {
                 </h3>
             </header>
             <p>
-                <strong>Токен:</strong> {user.accessToken.substring(0, 20)} ...{" "}
+                <strong>Токен:</strong> {user.accessToken.substring(0, 1000)} ...{" "}
                 {user.accessToken.substr(user.accessToken.length - 20)}
             </p>
             <p>
