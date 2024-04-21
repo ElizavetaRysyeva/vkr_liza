@@ -20,7 +20,7 @@ const Component = () => {
   };
 
   return (
-    <Navbar bg="light" expand="lg" className="mb-3">
+    <Navbar bg="light" expand="lg" className="mb-5">
       <Container>
         <Navbar.Brand
           as={Link}
@@ -42,17 +42,18 @@ const Component = () => {
               Главная страница
             </Nav.Link>
           </Nav>
-          <Footer/>
+          <Footer />
           <Nav className="ms-auto">
-            {isLoggedIn &&
-            <Nav.Link as={Link} to="/cart">
-              {orders && orders.length > 0 && (
-                <Badge bg="secondary" className="me-1">
-                  {orders.filter((x) => x.status === 1).length}
-                </Badge>
-              )}
-              Корзина
-            </Nav.Link>}
+            {isLoggedIn && (
+              <Nav.Link as={Link} to="/cart">
+                {orders && orders.length > 0 && (
+                  <Badge bg="secondary" className="me-1">
+                    {orders.filter((x) => x.status === 1).length}
+                  </Badge>
+                )}
+                Корзина
+              </Nav.Link>
+            )}
             {isLoggedIn ? (
               <>
                 <Nav.Link as={Link} to="/profile">

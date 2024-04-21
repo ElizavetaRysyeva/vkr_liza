@@ -4,6 +4,12 @@ const bcrypt = require("bcryptjs");
 const db = require("./app/models");
 const Role = db.role;
 const User = db.user;
+const Hotel = db.hotels;
+
+const xlsx = require("xlsx");
+const workbook = xlsx.readFile("./hotels.xlsx");
+const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+const excelData = xlsx.utils.sheet_to_json(worksheet);
 
 function initial() {
   Role.create({
@@ -23,16 +29,26 @@ function initial() {
   }).then((user) => {
     user.setRoles([2]);
   });
+
+  Hotel.bulkCreate(excelData)
+    .then(() => {
+      console.log("Hotel data inserted successfully.");
+    })
+    .catch((error) => {
+      console.error("Failed to insert hotel data:", error);
+    });
 }
 
 db.sequelize
-    .sync({ })
-    .then(() => {
-      console.log("Drop and re-sync db.");
-    })
-    .catch((err) => {
-      console.log("Failed to sync db: " + err.message);
-    });
+  .sync({ force: true })
+  /*для того, чтобы БД пересоздавалась, необходимо поставить .sync({ force: true})  */
+  .then(() => {
+    console.log("Drop and re-sync db.");
+    initial(); //для отключения пересоздания БД необходимо закомментировать эту строку
+  })
+  .catch((err) => {
+    console.log("Failed to sync db: " + err.message);
+  });
 
 const app = express();
 

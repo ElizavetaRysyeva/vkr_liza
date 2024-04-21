@@ -1,46 +1,46 @@
-import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import AuthService from "../services/auth.service";
 
 const user = JSON.parse(localStorage.getItem("user"));
 
 export const register = createAsyncThunk(
-    "auth/register",
-    async ({username, email, password}, thunkAPI) => {
-      try {
-        const response = await AuthService.register(username, email, password);
-        thunkAPI.dispatch(setMessage(response.data.message));
-        return response.data;
-      } catch (error) {
-        const message =
-            (error.response &&
-                error.response.data &&
-                error.response.data.message) ||
-            error.message ||
-            error.toString();
-        thunkAPI.dispatch(setMessage(message));
-        return thunkAPI.rejectWithValue();
-      }
+  "auth/register",
+  async ({ username, email, password }, thunkAPI) => {
+    try {
+      const response = await AuthService.register(username, email, password);
+      thunkAPI.dispatch(setMessage(response.data.message));
+      return response.data;
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      thunkAPI.dispatch(setMessage(message));
+      return thunkAPI.rejectWithValue();
     }
+  }
 );
 
 export const login = createAsyncThunk(
-    "auth/login",
-    async ({username, password}, thunkAPI) => {
-      try {
-        const data = await AuthService.login(username, password);
-        return {user: data};
-      } catch (error) {
-        const message =
-            (error.response &&
-                error.response.data &&
-                error.response.data.message) ||
-            error.message ||
-            error.toString();
-        thunkAPI.dispatch(setMessage(message));
-        return thunkAPI.rejectWithValue();
-      }
+  "auth/login",
+  async ({ username, password }, thunkAPI) => {
+    try {
+      const data = await AuthService.login(username, password);
+      return { user: data };
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      thunkAPI.dispatch(setMessage(message));
+      return thunkAPI.rejectWithValue();
     }
+  }
 );
 
 export const logout = createAsyncThunk("auth/logout", async () => {
@@ -79,8 +79,8 @@ const slice = createSlice({
     },
     updateRooms: (state, action) => {
       const tmp = state.rooms
-          .slice(0, state.rooms.length)
-          .filter((x) => +x.id !== action.payload.id);
+        .slice(0, state.rooms.length)
+        .filter((x) => +x.id !== action.payload.id);
       tmp.push(action.payload);
 
       state.rooms = tmp;
@@ -91,6 +91,14 @@ const slice = createSlice({
     addHotels: (state, action) => {
       state.hotels.push(action.payload);
     },
+    updateHotels: (state, action) => {
+      const tmp = state.hotels
+        .slice(0, state.hotels.length)
+        .filter((x) => +x.id !== action.payload.id);
+      tmp.push(action.payload);
+
+      state.hotels = tmp;
+    },
     setOrders: (state, action) => {
       state.orders = action.payload;
     },
@@ -99,16 +107,16 @@ const slice = createSlice({
     },
     updateOrder: (state, action) => {
       const tmp = state.orders
-          .slice(0, state.orders.length)
-          .filter((x) => +x.id !== action.payload.id);
+        .slice(0, state.orders.length)
+        .filter((x) => +x.id !== action.payload.id);
       tmp.push(action.payload);
 
       state.orders = tmp;
     },
     deleteOrder: (state, action) => {
       const tmp = state.orders
-          .slice(0, state.orders.length)
-          .filter((x) => +x.id !== +action.payload);
+        .slice(0, state.orders.length)
+        .filter((x) => +x.id !== +action.payload);
 
       state.orders = tmp;
     },
@@ -116,10 +124,10 @@ const slice = createSlice({
       state.orderStatuses = action.payload;
     },
     setMessage: (state, action) => {
-      return {message: action.payload};
+      return { message: action.payload };
     },
     clearMessage: () => {
-      return {message: ""};
+      return { message: "" };
     },
   },
   extraReducers: {
@@ -160,4 +168,5 @@ export const {
   clearMessage,
   setUsers,
   updateRooms,
+  updateHotels,
 } = slice.actions;

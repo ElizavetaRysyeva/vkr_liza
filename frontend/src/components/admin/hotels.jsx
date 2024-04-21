@@ -7,149 +7,387 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-import {addHotels, setHotels, setOrderStatuses} from "../reducerSlice";
+import {
+  addHotels,
+  setHotels,
+  setOrderStatuses,
+  updateHotels,
+} from "../reducerSlice";
 import authHeader from "../../services/auth-header";
+import { hotelTypes, starRatings } from "../../consts/consts";
+import { Modal } from "react-bootstrap";
 
 const Component = () => {
   const defNewObj = {
     name: "",
     address: "",
-    stars:"",
-    image:"",
+    stars: 0,
+    image: "",
+    country: "",
+    city: "",
+    propertyType: "",
   };
 
   const [newHotel, setNewHotel] = useState(defNewObj);
+  const [visibleCount, setVisibleCount] = useState(12);
   const apiBase = useSelector((state) => state.toolkit.apiBase);
   const hotel = useSelector((state) => state.toolkit.hotels);
+  const hotelsToShow = hotel.slice(0, visibleCount);
   const dispatch = useDispatch();
+
+  const [show, setShow] = useState(false);
+  const [selectedId, setSelectedId] = useState("");
+  const [selectedName, setSelectedName] = useState("");
+  const [selectedAddress, setSelectedAddress] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedPropertyType, setSelectedPropertyType] = useState("");
+  const [selectedStars, setSelectedStars] = useState("");
+  const [selectedImage, setSelectedImage] = useState("");
+
+  const handleShowMore = () => {
+    setVisibleCount(visibleCount + 5);
+  };
 
   useEffect(() => {
     axios.get(`${apiBase}/hotels`, { headers: authHeader() }).then((resp) => {
       dispatch(setHotels(resp.data));
     });
 
-
-
     axios
-        .get(`${apiBase}/orders/info/statuses`, {headers: authHeader()})
-        .then((resp) => {
-          dispatch(setOrderStatuses(resp.data));
-        });
+      .get(`${apiBase}/orders/info/statuses`, { headers: authHeader() })
+      .then((resp) => {
+        dispatch(setOrderStatuses(resp.data));
+      });
   }, [apiBase, dispatch]);
 
   const addNew = (e) => {
     e.preventDefault();
 
-    axios.post(`${apiBase}/hotels`, newHotel, { headers: authHeader() }).then((resp) => {
-      dispatch(addHotels(resp.data));
-      setNewHotel(defNewObj);
-    });
+    axios
+      .post(`${apiBase}/hotels`, newHotel, { headers: authHeader() })
+      .then((resp) => {
+        dispatch(addHotels(resp.data));
+        setNewHotel(defNewObj);
+      });
   };
 
   const handleChange = (e) => {
-    const newCategoryTmp = { ...newHotel };
+    const newHotelTmp = { ...newHotel };
 
-    newCategoryTmp[e.target.name] = e.target.value;
+    newHotelTmp[e.target.name] = e.target.value;
 
-    setNewHotel(newCategoryTmp);
+    setNewHotel(newHotelTmp);
+  };
+
+  const handleShow = (id) => {
+    const current = hotel.find((x) => x.id === id);
+
+    if (!current) return;
+
+    setSelectedId(current.id);
+    setSelectedName(current.name);
+    setSelectedImage(current.image);
+    setSelectedAddress(current.address);
+    setSelectedCity(current.city);
+    setSelectedCountry(current.country);
+    setSelectedPropertyType(current.propertyType);
+    setSelectedStars(current.stars);
+
+    setShow(true);
+  };
+
+  const handleClose = () => setShow(false);
+
+  const handleSave = () => {
+    const current = hotel.find((x) => x.id === selectedId);
+
+    if (!current) return;
+
+    const o = { ...current };
+    o.id = selectedId;
+    o.name = selectedName;
+    o.image = selectedImage;
+    o.country = selectedCountry;
+    o.city = selectedCity;
+    o.address = selectedAddress;
+    o.stars = selectedStars;
+    o.propertyType = selectedPropertyType;
+
+    axios
+      .put(`${apiBase}/hotels/${o.id}`, o, { headers: authHeader() })
+      .then((resp) => {
+        dispatch(updateHotels(o));
+        handleClose();
+      });
   };
 
   return (
-      <div className="mb-5 p-2 border border-top-0 rounded-bottom">
-        <h3>Список отелей</h3>
-
-        {hotel && (
-            <Table striped bordered hover>
+    <div className="mb-5 p-2 border border-top-0 rounded-bottom">
+      <h3>Список отелей</h3>
+      <Row>
+        <div className="table-responsive">
+          {hotelsToShow && (
+            <Table striped bordered hover size="sm">
               <thead>
-              <tr>
-                <th>ID</th>
-                <th>Название</th>
-                <th>Адрес</th>
-                <th>Звезд</th>
-                <th>Изображение</th>
-              </tr>
+                <tr>
+                  <th>ID</th>
+                  <th>Тип</th>
+                  <th>Название</th>
+                  <th>Страна</th>
+                  <th>Город</th>
+                  <th>Адрес</th>
+                  <th>Звезд</th>
+                  <th>Изображение</th>
+                  <th>Изменить</th>
+                </tr>
               </thead>
               <tbody>
-              {hotel.length > 0 &&
-                  hotel.map((x) => {
+                {hotelsToShow.length > 0 &&
+                  hotelsToShow.map((x) => {
                     return (
-                        <tr key={x.id}>
-                          <td>{x.id}</td>
-                          <td>{x.name}</td>
-                          <td>{x.address}</td>
-                          <td>{x.stars}</td>
-                          <td>{x.image}</td>
-                        </tr>
+                      <tr key={x.id}>
+                        <td>{x.id}</td>
+                        <td>{x.propertyType}</td>
+                        <td>{x.name}</td>
+                        <td>{x.country}</td>
+                        <td>{x.city}</td>
+                        <td>{x.address}</td>
+                        <td>{x.stars}</td>
+                        <td className="col-1">{x.image}</td>
+                        <td>
+                          <Button
+                            variant="light"
+                            onClick={() => handleShow(x.id)}
+                          >
+                            &#9998;
+                          </Button>
+                        </td>
+                      </tr>
                     );
                   })}
-              {!hotel.length && (
+                {!hotelsToShow.length && (
                   <tr>
                     <td>-</td>
                     <td>-</td>
                     <td>-</td>
                     <td>-</td>
                     <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
                   </tr>
-              )}
+                )}
               </tbody>
             </Table>
+          )}
+        </div>
+      </Row>
+
+      <Row style={{ justifyContent: "center" }}>
+        {visibleCount < hotel.length && (
+          <Button
+            variant="outline-secondary"
+            onClick={handleShowMore}
+            style={{ width: "10%" }}
+          >
+            Показать еще
+          </Button>
         )}
+      </Row>
 
-        <h3>Добавить новый отель</h3>
+      <h3>Добавить новый отель</h3>
 
-        <Form onSubmit={addNew}>
-          <Row>
-            <Col>
-              <Form.Group className="mb-3">
-                <Form.Label>Название</Form.Label>
-                <Form.Control
-                    type="text"
-                    name="name"
-                    placeholder="Название"
-                    value={newHotel.name}
-                    onChange={handleChange}
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label>Адрес</Form.Label>
-                <Form.Control
-                    type="text"
-                    name="address"
-                    placeholder="Адрес"
-                    value={newHotel.address}
-                    onChange={handleChange}
-                />
-              </Form.Group>
-            </Col>
-            <Col><Form.Group className="mb-3">
-              <Form.Label>Звезд</Form.Label>
+      <Form onSubmit={addNew}>
+        <Row>
+          <Col>
+            <Form.Group className="mb-3">
+              <Form.Label>Название</Form.Label>
               <Form.Control
-                  type="number"
-                  name="stars"
-                  placeholder="Звезд"
-                  value={newHotel.stars}
-                  onChange={handleChange}
+                type="text"
+                name="name"
+                placeholder="Название"
+                value={newHotel.name}
+                onChange={handleChange}
               />
             </Form.Group>
 
-              <Form.Group className="mb-3">
-                <Form.Label>Изображение</Form.Label>
-                <Form.Control
-                    type="text"
-                    name="image"
-                    placeholder="Изображение"
-                    value={newHotel.image}
-                    onChange={handleChange}
-                />
-              </Form.Group></Col>
-          </Row>
+            <Form.Group className="mb-3">
+              <Form.Label>Страна</Form.Label>
+              <Form.Control
+                type="text"
+                name="country"
+                placeholder="Страна"
+                value={newHotel.country}
+                onChange={handleChange}
+              />
+            </Form.Group>
 
-          <Button  variant="light"  type="submit">
-            Добавить
+            <Form.Group className="mb-3">
+              <Form.Label>Город</Form.Label>
+              <Form.Control
+                type="text"
+                name="city"
+                placeholder="Город"
+                value={newHotel.city}
+                onChange={handleChange}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Адрес</Form.Label>
+              <Form.Control
+                type="text"
+                name="address"
+                placeholder="Адрес"
+                value={newHotel.address}
+                onChange={handleChange}
+              />
+            </Form.Group>
+          </Col>
+          <Col>
+            <Form.Group className="mb-3">
+              <Form.Label>Тип</Form.Label>
+              <Form.Control
+                type="text"
+                name="name"
+                placeholder="Тип"
+                value={newHotel.propertyType}
+                onChange={handleChange}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Звезд</Form.Label>
+              <Form.Control
+                type="number"
+                name="stars"
+                placeholder="Звезд"
+                value={newHotel.stars}
+                onChange={handleChange}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Изображение</Form.Label>
+              <Form.Control
+                type="text"
+                name="image"
+                placeholder="Изображение"
+                value={newHotel.image}
+                onChange={handleChange}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Button variant="light" type="submit">
+          Добавить
+        </Button>
+      </Form>
+
+      {/* Модальное окно для редактирования */}
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Изменить</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Group className="mb-3">
+            <Form.Label>Тип</Form.Label>
+            <Form.Select
+              aria-label="Тип"
+              onClick={(event) => {
+                setSelectedPropertyType(
+                  event.target.value === "Тип" ? "" : event.target.value
+                );
+              }}
+            >
+              <option>Тип</option>
+              {hotelTypes &&
+                hotelTypes.map((x) => (
+                  <option key={x.english} value={x.english}>
+                    {x.russian}
+                  </option>
+                ))}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Изображение</Form.Label>
+            <Form.Control
+              type="text"
+              name="image"
+              placeholder="Изображение"
+              value={selectedImage}
+              onChange={(e) => setSelectedImage(e.target.value)}
+              onBlur={(e) => setSelectedImage(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Классификация</Form.Label>
+            <Form.Select
+              aria-label="Классификация"
+              onClick={(event) => {
+                setSelectedStars(
+                  event.target.value === "Классификация"
+                    ? ""
+                    : event.target.value
+                );
+              }}
+            >
+              <option>Классификация</option>
+              {starRatings &&
+                starRatings.map((x) => (
+                  <option key={x.number} value={x.label}>
+                    {x.number}
+                  </option>
+                ))}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Страна</Form.Label>
+            <Form.Control
+              type="text"
+              name="country"
+              placeholder="Страна"
+              value={selectedCountry}
+              onChange={(e) => setSelectedCountry(e.target.value)}
+              onBlur={(e) => setSelectedCountry(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Город</Form.Label>
+            <Form.Control
+              type="text"
+              name="city"
+              placeholder="Город"
+              value={selectedCity}
+              onChange={(e) => setSelectedCity(e.target.value)}
+              onBlur={(e) => setSelectedCity(e.target.value)}
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label>Адрес</Form.Label>
+            <Form.Control
+              type="text"
+              name="address"
+              placeholder="Адрес"
+              value={selectedAddress}
+              onChange={(e) => setSelectedAddress(e.target.value)}
+              onBlur={(e) => setSelectedAddress(e.target.value)}
+            />
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Отмена
           </Button>
-        </Form>
-      </div>
+          <Button variant="light" onClick={handleSave}>
+            Сохранить
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
   );
 };
 
