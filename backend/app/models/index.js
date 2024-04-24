@@ -1,7 +1,7 @@
-const Sequelize  = require('sequelize');
-const sequelize = new Sequelize('db', 'user', 'pass', {
-  dialect: 'sqlite',
-  host: '/backend/tour.db',
+const Sequelize = require("sequelize");
+const sequelize = new Sequelize("db", "user", "pass", {
+  dialect: "sqlite",
+  host: "./tour.db",
 });
 
 const db = {};
@@ -11,10 +11,15 @@ db.sequelize = sequelize;
 
 db.hotels = require("./hotel.model.js")(sequelize, Sequelize);
 db.rooms = require("./room.model.js")(sequelize, Sequelize, db.hotels);
-db.orders = require("./order.model.js")(sequelize, Sequelize, db.hotels, db.rooms);
+db.orders = require("./order.model.js")(
+  sequelize,
+  Sequelize,
+  db.user,
+  db.rooms,
+  db.hotels
+);
 db.user = require("./user.model.js")(sequelize, Sequelize);
 db.role = require("./role.model.js")(sequelize, Sequelize);
-
 
 db.role.belongsToMany(db.user, {
   through: "user_roles",
