@@ -1,8 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
   const Model = sequelize.define("hotel", {
-    hotelId: {
-      type: Sequelize.INTEGER,
-    },
     name: {
       type: Sequelize.STRING,
     },
@@ -15,8 +12,8 @@ module.exports = (sequelize, Sequelize) => {
     country: {
       type: Sequelize.STRING,
     },
-    zipCode: {
-      type: Sequelize.INTEGER,
+    country_rus: {
+      type: Sequelize.STRING,
     },
     propertyType: {
       type: Sequelize.STRING,
@@ -24,25 +21,7 @@ module.exports = (sequelize, Sequelize) => {
     stars: {
       type: Sequelize.STRING,
     },
-    latitude: {
-      type: Sequelize.INTEGER,
-    },
-    longitude: {
-      type: Sequelize.INTEGER,
-    },
-    source: {
-      type: Sequelize.INTEGER,
-    },
-    url: {
-      type: Sequelize.STRING,
-    },
-    curr: {
-      type: Sequelize.STRING,
-    },
-    hotelCode: {
-      type: Sequelize.INTEGER,
-    },
-    image: {
+    hotel_img: {
       type: Sequelize.STRING,
     },
   });

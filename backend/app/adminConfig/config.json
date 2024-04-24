@@ -1,6 +1,6 @@
 {
     "sqlite": {
-        "database": "/backend/tour.db"
+        "database": "tour.db"
     },
     "server": {
         "port": 8082

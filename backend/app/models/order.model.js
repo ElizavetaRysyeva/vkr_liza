@@ -1,19 +1,25 @@
 module.exports = (sequelize, Sequelize) => {
   const Model = sequelize.define("order", {
-    status: {
+    user_id: {
       type: Sequelize.INTEGER,
-    },
-    hotel_id: {
-      type: Sequelize.INTEGER,
-      references: sequelize.hotels,
+      references: sequelize.users,
     },
     room_id: {
       type: Sequelize.INTEGER,
       references: sequelize.rooms,
     },
-    user_id: {
+    hotel_id: {
       type: Sequelize.INTEGER,
-      references: sequelize.users,
+      references: sequelize.hotels,
+    },
+    status: {
+      type: Sequelize.INTEGER,
+    },
+    status_name: {
+      type: Sequelize.STRING,
+    },
+    cluster: {
+      type: Sequelize.INTEGER,
     },
   });
 

@@ -14,10 +14,12 @@ exports.create = (req, res) => {
 
   // Create a Order
   const obj = {
-    status: req.body.status,
+    user_id: req.userId,
     hotel_id: req.body.hotel_id,
     room_id: req.body.room_id,
-    user_id: req.userId,
+    status: req.body.status,
+    status_name: req.body.status_name,
+    cluster: req.body.cluster,
   };
 
   // Save Order in the database
@@ -37,8 +39,8 @@ exports.findAll = (req, res) => {
   const isAll = !!req.query.all;
 
   const search = isAll
-      ? undefined
-      : {
+    ? undefined
+    : {
         where: {
           user_id: req.userId,
         },

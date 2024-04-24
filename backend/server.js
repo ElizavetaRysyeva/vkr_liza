@@ -2,14 +2,26 @@ const express = require("express");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const db = require("./app/models");
+const xlsx = require("xlsx");
+
 const Role = db.role;
 const User = db.user;
 const Hotel = db.hotels;
+const Room = db.rooms;
+const Order = db.orders;
 
-const xlsx = require("xlsx");
-const workbook = xlsx.readFile("./hotels.xlsx");
-const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-const excelData = xlsx.utils.sheet_to_json(worksheet);
+// считывание данных из эксель файла
+const readExcel = (file) => {
+  const dbFile = xlsx.readFile(file);
+  const dbWorksheet = dbFile.Sheets[dbFile.SheetNames[0]];
+  const dbData = xlsx.utils.sheet_to_json(dbWorksheet);
+  return dbData;
+};
+
+const hotelData = readExcel("./hotels.xlsx");
+const roomData = readExcel("./room.xlsx");
+const userData = readExcel("./users.xlsx");
+const orderData = readExcel("./orders.xlsx");
 
 function initial() {
   Role.create({
@@ -30,12 +42,36 @@ function initial() {
     user.setRoles([2]);
   });
 
-  Hotel.bulkCreate(excelData)
+  Hotel.bulkCreate(hotelData)
     .then(() => {
       console.log("Hotel data inserted successfully.");
     })
     .catch((error) => {
       console.error("Failed to insert hotel data:", error);
+    });
+
+  Room.bulkCreate(roomData)
+    .then(() => {
+      console.log("Room data inserted successfully.");
+    })
+    .catch((error) => {
+      console.error("Failed to insert room data:", error);
+    });
+
+  User.bulkCreate(userData)
+    .then(() => {
+      console.log("User data inserted successfully.");
+    })
+    .catch((error) => {
+      console.error("Failed to insert user data:", error);
+    });
+
+  Order.bulkCreate(orderData)
+    .then(() => {
+      console.log("Order data inserted successfully.");
+    })
+    .catch((error) => {
+      console.error("Failed to insert order data:", error);
     });
 }
 

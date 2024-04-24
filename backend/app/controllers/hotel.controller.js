@@ -14,20 +14,14 @@ exports.create = (req, res) => {
 
   // Create a Hotel
   const obj = {
-    hotelId: req.body.hotelId,
     name: req.body.name,
     address: req.body.address,
     city: req.body.city,
     country: req.body.country,
-    zipCode: req.body.zipCode,
+    country_rus: req.body.country_rus,
     propertyType: req.body.propertyType,
     stars: req.body.stars,
-    image: req.body.image,
-    latitude: req.body.latitude,
-    longitude: req.body.longitude,
-    source: req.body.source,
-    url: req.body.url,
-    hotelCode: req.body.hotelCode,
+    hotel_img: req.body.hotel_img,
   };
 
   // Save Hotel in the database
@@ -44,7 +38,7 @@ exports.create = (req, res) => {
 
 // Retrieve all Hotels from the database.
 exports.findAll = (req, res) => {
-  const { name, propertyType, country, stars } = req.query;
+  const { name, propertyType, country, stars, country_rus } = req.query;
   let condition = {};
 
   if (name) {
@@ -58,6 +52,10 @@ exports.findAll = (req, res) => {
 
   if (country) {
     condition.country = country;
+  }
+
+  if (country_rus) {
+    condition.country = country_rus;
   }
 
   if (stars) {
