@@ -80,6 +80,22 @@ export const FilterHotel = (props) => {
         </Col>
 
         <Col xs={2} md={2}>
+          <h6>Максимальная вместимость </h6>
+          <Form.Group>
+            {starRatings &&
+              starRatings.map((x) => (
+                <Form.Check
+                  key={x.number}
+                  type="checkbox"
+                  label={x.label}
+                  checked={selectedStarRatings.includes(x.number)}
+                  onChange={() => handleStarRatingChange(x.number)}
+                />
+              ))}
+          </Form.Group>
+        </Col>
+
+        <Col xs={2} md={2}>
           <h6>Страна</h6>
           <Form.Select aria-label="Страна" onClick={handleCountryChange}>
             <option>Страна</option>

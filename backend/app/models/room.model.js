@@ -27,5 +27,9 @@ module.exports = (sequelize, Sequelize) => {
     },
   });
 
+  Model.associate = (models) => {
+    Model.belongsTo(models.Hotel, { foreignKey: "hotel_id" });
+  };
+  
   return Model;
 };

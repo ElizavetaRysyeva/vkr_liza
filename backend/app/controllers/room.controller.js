@@ -40,25 +40,51 @@ exports.create = (req, res) => {
 exports.findAll = (req, res) => {
   if (req.query.hasOwnProperty(`category`) && !req.query.category) {
     res.status(404).send({
-      message: `Cannot find Hotels with empty name.`,
+      message: `Cannot find Rooms with empty name.`,
     });
     return;
   }
 
-  const hotel_id = req.query.hotel_id;
-  var condition = hotel_id
-    ? { hotel_id: { [Op.like]: `%${hotel_id}%` } }
-    : null;
+  const { max_count, hotel_id } = req.query;
+  let condition = {};
+  // if (hotel_id) {
+  //   condition.hotel_id = hotel_id
+  //     ? { hotel_id: { [Op.like]: `%${hotel_id}%` } }
+  //     : null;
+  // }
 
-  Room.findAll({ where: condition })
-    .then((data) => {
-      res.send(data);
+  if (max_count) {
+    Room.findAll({
+      where: condition,
+      attributes: [
+        [db.sequelize.fn("DISTINCT", db.sequelize.col("hotel_id")), "hotel_id"],
+      ], // Указываем только поле hotel_id
     })
-    .catch((err) => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while retrieving Hotels.",
+      .then((data) => {
+        // Преобразуем массив объектов в массив значений hotel_id
+        const hotelIds = data.map((room) => room.hotel_id);
+        // Отправляем массив значений hotel_id
+        res.send(hotelIds);
+      })
+      .catch((err) => {
+        res.status(500).send({
+          message:
+            err.message || "Some error occurred while retrieving Hotels.",
+        });
       });
-    });
+  } else {
+    Room.findAll({ where: condition })
+      .then((data) => {
+        res.send(data);
+      })
+      .catch((err) => {
+        res.status(500).send({
+          message:
+            err.message || "Some error occurred while retrieving Hotels.",
+        });
+      });
+  }
+
 };
 
 // Find a single Room with an id

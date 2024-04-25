@@ -51,12 +51,12 @@
             "readonly": false
         }
     },
-    "users": {
-        "slug": "users",
+    "hotels": {
+        "slug": "hotels",
         "table": {
-            "name": "users",
+            "name": "hotels",
             "pk": "id",
-            "verbose": "users"
+            "verbose": "hotels"
         },
         "columns": [
             {
@@ -76,8 +76,8 @@
                 }
             },
             {
-                "name": "username",
-                "verbose": "username",
+                "name": "name",
+                "verbose": "name",
                 "control": {
                     "text": true
                 },
@@ -92,8 +92,8 @@
                 }
             },
             {
-                "name": "email",
-                "verbose": "email",
+                "name": "address",
+                "verbose": "address",
                 "control": {
                     "text": true
                 },
@@ -108,8 +108,88 @@
                 }
             },
             {
-                "name": "password",
-                "verbose": "password",
+                "name": "city",
+                "verbose": "city",
+                "control": {
+                    "text": true
+                },
+                "type": "VARCHAR(255)",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "country",
+                "verbose": "country",
+                "control": {
+                    "text": true
+                },
+                "type": "VARCHAR(255)",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "country_rus",
+                "verbose": "country_rus",
+                "control": {
+                    "text": true
+                },
+                "type": "VARCHAR(255)",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "propertyType",
+                "verbose": "propertyType",
+                "control": {
+                    "text": true
+                },
+                "type": "VARCHAR(255)",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "stars",
+                "verbose": "stars",
+                "control": {
+                    "text": true
+                },
+                "type": "INTEGER",
+                "allowNull": true,
+                "defaultValue": null,
+                "listview": {
+                    "show": true
+                },
+                "editview": {
+                    "show": true
+                }
+            },
+            {
+                "name": "hotel_img",
+                "verbose": "hotel_img",
                 "control": {
                     "text": true
                 },
@@ -335,12 +415,12 @@
             "readonly": false
         }
     },
-    "hotels": {
-        "slug": "hotels",
+    "users": {
+        "slug": "users",
         "table": {
-            "name": "hotels",
+            "name": "users",
             "pk": "id",
-            "verbose": "hotels"
+            "verbose": "users"
         },
         "columns": [
             {
@@ -360,8 +440,8 @@
                 }
             },
             {
-                "name": "name",
-                "verbose": "name",
+                "name": "username",
+                "verbose": "username",
                 "control": {
                     "text": true
                 },
@@ -376,8 +456,8 @@
                 }
             },
             {
-                "name": "address",
-                "verbose": "address",
+                "name": "email",
+                "verbose": "email",
                 "control": {
                     "text": true
                 },
@@ -392,88 +472,8 @@
                 }
             },
             {
-                "name": "city",
-                "verbose": "city",
-                "control": {
-                    "text": true
-                },
-                "type": "VARCHAR(255)",
-                "allowNull": true,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "country",
-                "verbose": "country",
-                "control": {
-                    "text": true
-                },
-                "type": "VARCHAR(255)",
-                "allowNull": true,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "country_rus",
-                "verbose": "country_rus",
-                "control": {
-                    "text": true
-                },
-                "type": "VARCHAR(255)",
-                "allowNull": true,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "propertyType",
-                "verbose": "propertyType",
-                "control": {
-                    "text": true
-                },
-                "type": "VARCHAR(255)",
-                "allowNull": true,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "stars",
-                "verbose": "stars",
-                "control": {
-                    "text": true
-                },
-                "type": "VARCHAR(255)",
-                "allowNull": true,
-                "defaultValue": null,
-                "listview": {
-                    "show": true
-                },
-                "editview": {
-                    "show": true
-                }
-            },
-            {
-                "name": "hotel_img",
-                "verbose": "hotel_img",
+                "name": "password",
+                "verbose": "password",
                 "control": {
                     "text": true
                 },

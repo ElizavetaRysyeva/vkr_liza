@@ -28,5 +28,12 @@ module.exports = (sequelize, Sequelize) => {
     { val: 2, name: "Оплачен" },
   ];
 
+  Model.associate = (models) => {
+    Model.belongsTo(models.User, { foreignKey: "user_id" });
+    Model.belongsTo(models.Room, { foreignKey: "room_id" });
+    Model.belongsTo(models.Hotel, { foreignKey: "hotel_id" });
+  };
+  
+
   return Model;
 };

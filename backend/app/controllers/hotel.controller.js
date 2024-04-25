@@ -38,7 +38,7 @@ exports.create = (req, res) => {
 
 // Retrieve all Hotels from the database.
 exports.findAll = (req, res) => {
-  const { name, propertyType, country, stars, country_rus } = req.query;
+  const { name, propertyType, country, stars, country_rus, id } = req.query;
   let condition = {};
 
   if (name) {
@@ -61,6 +61,10 @@ exports.findAll = (req, res) => {
   if (stars) {
     const starValues = stars.split(",").map((item) => item.trim());
     condition.stars = starValues;
+  }
+
+  if (id) {
+    condition.id = id;
   }
 
   Hotel.findAll({ where: condition })

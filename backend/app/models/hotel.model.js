@@ -19,7 +19,7 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
     },
     stars: {
-      type: Sequelize.STRING,
+      type: Sequelize.INTEGER,
     },
     hotel_img: {
       type: Sequelize.STRING,
