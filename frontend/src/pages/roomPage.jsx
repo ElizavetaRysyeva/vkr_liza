@@ -1,5 +1,5 @@
 import { RoomList } from "../components/rooms/RoomList";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -19,6 +19,9 @@ export const RoomPage = () => {
 
   const orderStatuses = useSelector((state) => state.toolkit.orderStatuses);
   const dispatch = useDispatch();
+
+  const [visibleCount, setVisibleCount] = useState(12);
+  const roomsToShow = rooms.slice(0, visibleCount);
 
   useEffect(() => {
     axios
@@ -55,7 +58,13 @@ export const RoomPage = () => {
 
   return (
     <div>
-      <RoomList rooms={rooms} addCart={addCart} />
+      <RoomList
+        rooms={rooms}
+        roomsToShow={roomsToShow}
+        visibleCount={visibleCount}
+        setVisibleCount={setVisibleCount}
+        addCart={addCart}
+      />
     </div>
   );
 };

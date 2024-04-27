@@ -154,7 +154,7 @@ const Component = () => {
                         <td>{x.city}</td>
                         <td>{x.address}</td>
                         <td>{x.stars}</td>
-                        <td className="col-1">{x.image}</td>
+                        <td className="col-1">{x.hotel_img}</td>
                         <td>
                           <Button
                             variant="light"

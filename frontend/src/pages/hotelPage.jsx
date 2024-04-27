@@ -27,9 +27,14 @@ const Component = () => {
   const fetchData = useCallback(async () => {
     try {
       let params = {};
+      let roomParams = {};
 
       if (sendQuery) {
-        params.name = sendQuery;
+        const russianPattern = /[а-яА-Я]/;
+        const isRussianInput = russianPattern.test(sendQuery);
+        if (isRussianInput) {
+          roomParams.category_rus = sendQuery;
+        } else params.name = sendQuery;
       }
 
       if (selectedCountry && selectedCountry.length > 0) {
@@ -42,22 +47,20 @@ const Component = () => {
 
       if (selectedHotelTypes && selectedHotelTypes.length > 0) {
         params.propertyType = selectedHotelTypes.join(",");
-        console.log(selectedHotelTypes);
       }
-
-      let roomParams = {};
 
       if (selectedMaxCount && selectedMaxCount.length > 0) {
         roomParams.max_count = selectedMaxCount.join(",");
+      }
 
+      if (Object.keys(roomParams).length > 0) {
         const responseHotelIds = await axios.get(`${apiBase}/rooms`, {
           params: roomParams,
         });
-
+        console.log("я зашел");
         const ids = responseHotelIds.data.join(", ");
 
         params.id = ids;
-        console.log(ids);
       }
 
       const response = await axios.get(`${apiBase}/hotels`, {

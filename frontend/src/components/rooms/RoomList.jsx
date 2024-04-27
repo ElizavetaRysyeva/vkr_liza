@@ -8,8 +8,12 @@ import Card from "react-bootstrap/Card";
 import { useSelector } from "react-redux";
 
 export const RoomList = (props) => {
-  const { rooms, addCart } = props;
+  const { rooms, addCart, roomsToShow, visibleCount, setVisibleCount } = props;
   const isLoggedIn = useSelector((state) => state.toolkit.isLoggedIn);
+
+  const handleShowMore = () => {
+    setVisibleCount(visibleCount + 12);
+  };
 
   return (
     <>
@@ -22,9 +26,9 @@ export const RoomList = (props) => {
 
       <hr />
       <div className="Row">
-        <Row xs={1} md={3} className="g-4">
-          {rooms &&
-            rooms.map((x) => (
+        <Row xs={3} md={3} className="g-4" style={{ paddingBottom: 20 }}>
+          {roomsToShow &&
+            roomsToShow.map((x) => (
               <Col>
                 <Card style={{ height: "100%", padding: 10 }} key={x.id}>
                   <Card.Img
@@ -62,6 +66,18 @@ export const RoomList = (props) => {
                 </Card>
               </Col>
             ))}
+        </Row>
+
+        <Row style={{ justifyContent: "center" }}>
+          {visibleCount < rooms.length && (
+            <Button
+              variant="outline-primary"
+              onClick={handleShowMore}
+              style={{ width: "10%" }}
+            >
+              Показать еще
+            </Button>
+          )}
         </Row>
 
         {!rooms.length && (

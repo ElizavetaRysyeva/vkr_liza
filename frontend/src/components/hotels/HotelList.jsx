@@ -79,7 +79,7 @@ export const HotelList = (props) => {
                   </Card.Title>
 
                   <Card.Text style={{ textAlign: `center` }}>
-                    {x.country}, {x.city}
+                    {x.country_rus}
                   </Card.Text>
                   <Card.Text style={{ textAlign: `center` }}>
                     <Button
@@ -106,9 +106,7 @@ export const HotelList = (props) => {
           </Button>
         )}
       </Row>
-      {!hotelsToShow ||
-        hotelsToShow.length < 0 ||
-        ((!allHotels || allHotels.length < 0) && <h3>Отели не найдены</h3>)}
+      {!allHotels.length && <h3>Отели не найдены</h3>}
     </div>
   );
 };

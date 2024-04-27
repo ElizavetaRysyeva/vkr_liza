@@ -45,7 +45,7 @@ exports.findAll = (req, res) => {
     return;
   }
 
-  const { max_count, hotel_id } = req.query;
+  const { max_count, category_rus, category } = req.query;
   let condition = {};
 
   // Максимальная вместимость
@@ -53,13 +53,22 @@ exports.findAll = (req, res) => {
     const maxCount = max_count.split(",").map((item) => item.trim());
     condition.max_count = maxCount;
   }
+
+  if (category_rus) {
+    condition.category_rus = { [Op.like]: `%${category_rus}%` };
+  }
+
+  if (category) {
+    condition.category = { [Op.like]: `%${category}%` };
+  }
+
   // if (hotel_id) {
   //   condition.hotel_id = hotel_id
   //     ? { hotel_id: { [Op.like]: `%${hotel_id}%` } }
   //     : null;
   // }
 
-  if (max_count) {
+  if (max_count || category_rus || category) {
     Room.findAll({
       where: condition,
       attributes: [
