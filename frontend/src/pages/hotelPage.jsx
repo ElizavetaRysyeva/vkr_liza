@@ -20,6 +20,7 @@ const Component = () => {
   const [selectedHotelTypes, setSelectedHotelTypes] = useState([]);
   const [selectedStarRatings, setSelectedStarRatings] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState("");
+  const [selectedMaxCount, setSelectedMaxCount] = useState([]);
 
   const hotelsToShow = allHotels.slice(0, visibleCount);
 
@@ -32,20 +33,38 @@ const Component = () => {
       }
 
       if (selectedCountry && selectedCountry.length > 0) {
-        params.country = selectedCountry;
+        params.country_rus = selectedCountry;
       }
 
       if (selectedStarRatings && selectedStarRatings.length > 0) {
         params.stars = selectedStarRatings.join(",");
       }
 
-      if (selectedStarRatings && selectedHotelTypes.length > 0) {
+      if (selectedHotelTypes && selectedHotelTypes.length > 0) {
         params.propertyType = selectedHotelTypes.join(",");
+        console.log(selectedHotelTypes);
+      }
+
+      let roomParams = {};
+
+      if (selectedMaxCount && selectedMaxCount.length > 0) {
+        roomParams.max_count = selectedMaxCount.join(",");
+
+        const responseHotelIds = await axios.get(`${apiBase}/rooms`, {
+          params: roomParams,
+        });
+
+        const ids = responseHotelIds.data.join(", ");
+
+        params.id = ids;
+        console.log(ids);
       }
 
       const response = await axios.get(`${apiBase}/hotels`, {
         params: params,
       });
+
+      // Отправляем отфильтрованные отели в хранилище
       dispatch(setHotels(response.data));
     } catch (error) {
       console.error("Error fetching filtered hotels:", error);
@@ -55,6 +74,7 @@ const Component = () => {
     selectedCountry,
     selectedStarRatings,
     selectedHotelTypes,
+    selectedMaxCount,
     apiBase,
     dispatch,
   ]);
@@ -89,6 +109,8 @@ const Component = () => {
           setSelectedHotelTypes={setSelectedHotelTypes}
           setSelectedStarRatings={setSelectedStarRatings}
           selectedStarRatings={selectedStarRatings}
+          selectedMaxCount={selectedMaxCount}
+          setSelectedMaxCount={setSelectedMaxCount}
         />
       </Row>
 

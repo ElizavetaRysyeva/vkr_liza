@@ -12,25 +12,9 @@ export const starRatings = [
   { number: 1, label: "без звезд" },
 ];
 
-export const countries = [
-  { russian: "Хорватия", english: "Croatia" },
-  { russian: "Польша", english: "Poland" },
-  { russian: "Италия", english: "Italy" },
-  { russian: "Чехия", english: "Czech Republic" },
-  { russian: "Болгария", english: "Bulgaria" },
-  { russian: "Греция", english: "Greece" },
-  { russian: "Нидерланды", english: "Netherlands" },
-  { russian: "Австрия", english: "Romania" },
-  { russian: "Румыния", english: "France" },
-  { russian: "Швейцария", english: "Switzerland" },
-  { russian: "Великобритания", english: "United Kingdom" },
-];
-
-
 export const maxCount = [
   { number: 1 },
   { number: 2 },
   { number: 3 },
   { number: 4 },
-  { number: 5 },
 ];

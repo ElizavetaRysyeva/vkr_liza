@@ -47,6 +47,12 @@ exports.findAll = (req, res) => {
 
   const { max_count, hotel_id } = req.query;
   let condition = {};
+
+  // Максимальная вместимость
+  if (max_count) {
+    const maxCount = max_count.split(",").map((item) => item.trim());
+    condition.max_count = maxCount;
+  }
   // if (hotel_id) {
   //   condition.hotel_id = hotel_id
   //     ? { hotel_id: { [Op.like]: `%${hotel_id}%` } }
@@ -58,12 +64,10 @@ exports.findAll = (req, res) => {
       where: condition,
       attributes: [
         [db.sequelize.fn("DISTINCT", db.sequelize.col("hotel_id")), "hotel_id"],
-      ], // Указываем только поле hotel_id
+      ], // вывод только поля hotel_id в ответе
     })
       .then((data) => {
-        // Преобразуем массив объектов в массив значений hotel_id
         const hotelIds = data.map((room) => room.hotel_id);
-        // Отправляем массив значений hotel_id
         res.send(hotelIds);
       })
       .catch((err) => {
@@ -84,7 +88,6 @@ exports.findAll = (req, res) => {
         });
       });
   }
-
 };
 
 // Find a single Room with an id

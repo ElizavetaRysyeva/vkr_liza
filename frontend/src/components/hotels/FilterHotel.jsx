@@ -2,10 +2,11 @@ import Col from "react-bootstrap/Col";
 
 import Form from "react-bootstrap/Form";
 
-import { hotelTypes } from "../../consts/consts";
-import { countries } from "../../consts/consts";
-import { starRatings } from "../../consts/consts";
+import { hotelTypes, maxCount, starRatings } from "../../consts/consts";
+
 import Row from "react-bootstrap/esm/Row";
+import { useSelector } from "react-redux";
+import { useEffect, useRef } from "react";
 
 export const FilterHotel = (props) => {
   const {
@@ -13,25 +14,42 @@ export const FilterHotel = (props) => {
     selectedStarRatings,
     setSelectedStarRatings,
     setSelectedCountry,
+    setSelectedMaxCount,
   } = props;
+
   const handleStarRatingChange = (number) => {
     if (selectedStarRatings.includes(number)) {
-      // Если элемент уже выбран, удаляем его из массива
       setSelectedStarRatings(
         selectedStarRatings.filter((item) => item !== number)
       );
     } else {
-      // Если элемент не выбран, добавляем его в массив
       setSelectedStarRatings([...selectedStarRatings, number]);
     }
   };
 
-  // Для выбора страны
   const handleCountryChange = (event) => {
     setSelectedCountry(
       event.target.value === "Страна" ? "" : event.target.value
     );
   };
+
+  // запись уникальных значений стран из поля country_rus отелей для последующей фильтрации
+  const countryRef = useRef(new Set());
+  const contr = useSelector((state) => {
+    if (countryRef.current.size === 0) {
+      state.toolkit.hotels.forEach((hotel) => {
+        countryRef.current.add(hotel.country_rus);
+      });
+    }
+    return Array.from(countryRef.current);
+  });
+
+  useEffect(() => {
+    const currentCountryRef = countryRef.current;
+    return () => {
+      currentCountryRef.clear(); // Сброс значения при размонтировании компонента
+    };
+  }, []);
 
   return (
     <div>
@@ -51,11 +69,11 @@ export const FilterHotel = (props) => {
                       setSelectedHotelTypes((prevTypes) => [
                         ...prevTypes,
                         x.english,
-                      ]); // Добавление нового типа
+                      ]);
                     } else {
                       setSelectedHotelTypes((prevTypes) =>
                         prevTypes.filter((type) => type !== x.english)
-                      ); // Удаление типа из массива
+                      );
                     }
                   }}
                 />
@@ -82,14 +100,24 @@ export const FilterHotel = (props) => {
         <Col xs={2} md={2}>
           <h6>Максимальная вместимость </h6>
           <Form.Group>
-            {starRatings &&
-              starRatings.map((x) => (
+            {maxCount &&
+              maxCount.map((x) => (
                 <Form.Check
                   key={x.number}
                   type="checkbox"
-                  label={x.label}
-                  checked={selectedStarRatings.includes(x.number)}
-                  onChange={() => handleStarRatingChange(x.number)}
+                  label={x.number}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setSelectedMaxCount((prevTypes) => [
+                        ...prevTypes,
+                        x.number,
+                      ]);
+                    } else {
+                      setSelectedMaxCount((prevTypes) =>
+                        prevTypes.filter((type) => type !== x.number)
+                      );
+                    }
+                  }}
                 />
               ))}
           </Form.Group>
@@ -99,10 +127,10 @@ export const FilterHotel = (props) => {
           <h6>Страна</h6>
           <Form.Select aria-label="Страна" onClick={handleCountryChange}>
             <option>Страна</option>
-            {countries &&
-              countries.map((x) => (
-                <option key={x.english} value={x.english}>
-                  {x.russian}
+            {contr &&
+              contr.map((x) => (
+                <option key={x} value={x}>
+                  {x}
                 </option>
               ))}
           </Form.Select>

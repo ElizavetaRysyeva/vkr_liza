@@ -38,7 +38,7 @@ exports.create = (req, res) => {
 
 // Retrieve all Hotels from the database.
 exports.findAll = (req, res) => {
-  const { name, propertyType, country, stars, country_rus, id } = req.query;
+  const { name, propertyType, country, stars, country_rus, id } = req.query; // параметры поиска отеля
   let condition = {};
 
   if (name) {
@@ -55,7 +55,7 @@ exports.findAll = (req, res) => {
   }
 
   if (country_rus) {
-    condition.country = country_rus;
+    condition.country_rus = country_rus;
   }
 
   if (stars) {
@@ -64,7 +64,8 @@ exports.findAll = (req, res) => {
   }
 
   if (id) {
-    condition.id = id;
+    const ids = id.split(",").map((item) => item.trim());
+    condition.id = ids;
   }
 
   Hotel.findAll({ where: condition })
