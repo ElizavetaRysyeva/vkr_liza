@@ -29,24 +29,7 @@ const Component = () => {
       let params = {};
       let roomParams = {};
       if (sendQuery) {
-        const russianPattern = /[а-яА-Я]/;
-        const englishPattern = /[a-zA-Z]/;
-
-        const isRussianInput = russianPattern.test(sendQuery);
-        const isEnglishInput = englishPattern.test(sendQuery);
-
-        if (isRussianInput && isEnglishInput) {
-          const russianPart = sendQuery.match(russianPattern).join("");
-          const englishPart = sendQuery.match(englishPattern).join("");
-
-          params.name = englishPart;
-
-          roomParams.category_rus = russianPart;
-        } else if (isRussianInput) {
-          roomParams.category_rus = sendQuery;
-        } else {
-          params.name = sendQuery;
-        }
+        roomParams.description = sendQuery;
       }
 
       if (selectedCountry && selectedCountry.length > 0) {

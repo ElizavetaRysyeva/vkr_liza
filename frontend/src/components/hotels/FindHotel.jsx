@@ -9,7 +9,7 @@ export const FindHotel = (params) => {
         <Form.Group className="mb-3">
           <Form.Control
             type="text"
-            placeholder="Введите название отеля для поиска или категорию номера"
+            placeholder="Введите описание номера"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
