@@ -23,7 +23,7 @@ const Component = () => {
   const [selectedMaxCount, setSelectedMaxCount] = useState([]);
 
   const hotelsToShow = allHotels.slice(0, visibleCount);
-
+// g
   const fetchData = useCallback(async () => {
     try {
       let params = {};
@@ -52,7 +52,7 @@ const Component = () => {
         const responseHotelIds = await axios.get(`${apiBase}/rooms`, {
           params: roomParams,
         });
-        console.log("я зашел");
+    
         const ids = responseHotelIds.data.join(", ");
 
         params.id = ids;
